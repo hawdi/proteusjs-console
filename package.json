@@ -11,11 +11,10 @@
     "node": ">=4.0.0"
   },
   "dependencies": {
-    "hoek": "^4.0.2"
+    "hoek": "^4.0.2",
+    "moment": "^2.15.1"
   },
-  "peerDependencies": {
-
-  },
+  "peerDependencies": {},
   "devDependencies": {
     "code": "3.x.x",
     "lab": "11.x.x"
