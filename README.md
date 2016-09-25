@@ -17,6 +17,14 @@ Creates a new ProteusjsConsole object with the following arguments:
 ## Output Formats
 Below are example outputs for the designated event type:
 
+- `[database event]`
+	- `query` - 160925/065549.166, [knex:query] select [ sql: select * from `log` ]
+	- `end`	-	160925/071149.107, [knex:end] info: Query executed successfully
+	- `queryerror` - 160925/072007.936, [knex:queryerror] error: [ select * from `logg` - ER_NO_SUCH_TABLE: Table 'sample.logg' doesn't exist ]
+	- `error`	- 160925/074231.942, [knex:error] error: [ select * from `logg` - ER_NO_SUCH_TABLE: Table 'sample.logg' doesn't exist ]
+
+
+
 - `[httpclient]`
-	- `request` - 160925/060859.691, [wreck : request] get https://github.com/hawdi/proteusjs
-	- `response` - 160925/062323.377, [wreck : response] get https://github.com/hawdi/proteusjs (200|OK)
+	- `request` - 160925/060859.691, [wreck:request] get https://github.com/hawdi/proteusjs
+	- `response` - 160925/062323.377, [wreck:response] get https://github.com/hawdi/proteusjs (200|OK)
