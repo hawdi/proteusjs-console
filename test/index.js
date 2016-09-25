@@ -12,6 +12,7 @@ const it = lab.it;
 const Streams = require('./fixture/streams');
 const Server = require('./fixture/server');
 const Database = require('./fixture/database');
+const HttpClient = require('./fixture/httpclient');
 
 const Console = require('..');
 
@@ -155,6 +156,44 @@ describe('ProteusjsConsole', () => {
 
         expect(out.data).to.have.length(1);
         expect(out.data[0]).to.be.equal('160925/134134.741, [knex:error] \u001b[1;31merror\u001b[0m: [ select * from `logg` - ER_NO_SUCH_TABLE: Table \'sample.logg\' doesn\'t exist ]\n');
+        done();
+      });
+    });
+
+  });
+
+  describe('HttpClient Events', () => {
+
+    it('returns a formatted string for "request" events', { plan: 2 }, (done) => {
+
+      const reporter = new Console();
+      const out = new Streams.Writer();
+      const reader = new Streams.Reader();
+
+      reader.pipe(reporter).pipe(out);
+      reader.push(HttpClient.httpRequest);
+      reader.push(null);
+      reader.once('end', () => {
+
+        expect(out.data).to.have.length(1);
+        expect(out.data[0]).to.be.equal('160925/135819.297, [wreck:request] \u001b[1;32mget\u001b[0m http://json.org/example.html\n');
+        done();
+      });
+    });
+
+    it('returns a formatted string for "response" events', { plan: 2 }, (done) => {
+
+      const reporter = new Console();
+      const out = new Streams.Writer();
+      const reader = new Streams.Reader();
+
+      reader.pipe(reporter).pipe(out);
+      reader.push(HttpClient.httpResponse);
+      reader.push(null);
+      reader.once('end', () => {
+
+        expect(out.data).to.have.length(1);
+        expect(out.data[0]).to.be.equal('160925/135820.098, [wreck:response] \u001b[1;32mget\u001b[0m http://json.org/example.html (\u001b[32m200\u001b[0m|OK)\n');
         done();
       });
     });
