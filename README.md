@@ -17,13 +17,17 @@ Creates a new ProteusjsConsole object with the following arguments:
 ## Output Formats
 Below are example outputs for the designated event type:
 
+- `[server event]`
+	- `log` - 160925/080223.698, [server:log] {event.data} pid: ({event.pid})
+	- `request` - 160925/080710.318, [server:request] ${event.method} ${event.path}
+	- `response` - 160925/080710.304, [server:response] http://localhost:6200: ${event.method} ${event.path} {} {event.statusCode} ({event.responseTime}ms)
+	- `ops` - 160925/080722.290, [server:ops] memory: 66Mb, uptime (seconds): 31.802, load: [0,0,0]
+
 - `[database event]`
 	- `query` - 160925/065549.166, [knex:query] select [ sql: select * from `log` ]
 	- `end`	-	160925/071149.107, [knex:end] info: Query executed successfully
 	- `queryerror` - 160925/072007.936, [knex:queryerror] error: [ select * from `logg` - ER_NO_SUCH_TABLE: Table 'sample.logg' doesn't exist ]
 	- `error`	- 160925/074231.942, [knex:error] error: [ select * from `logg` - ER_NO_SUCH_TABLE: Table 'sample.logg' doesn't exist ]
-
-
 
 - `[httpclient]`
 	- `request` - 160925/060859.691, [wreck:request] get https://github.com/hawdi/proteusjs
