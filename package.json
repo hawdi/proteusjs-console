@@ -1,7 +1,7 @@
 {
   "name": "proteusjs-console",
   "description": "Proteusjs Console Plugin",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "lib/index.js",
   "keywords": [
     "proteusjs",
