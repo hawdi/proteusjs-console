@@ -5,9 +5,10 @@ node_js:
   - "4"
   - "node"
 
-install:
-  - npm install -g codecov
-
 script:
-  - istanbul cover ./node_modules/lab/bin/lab --report lcovonly  -- -l  && codecov
-  - codecov
+  - "if [ $COVERAGE ]; then npm run cover && bash <(curl -s https://codecov.io/bash) -f coverage/lcov.info; else npm run test; fi"
+
+matrix:
+  include:
+    - node_js: "4"
+      env: COVERAGE=true
