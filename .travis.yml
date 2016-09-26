@@ -5,5 +5,9 @@ node_js:
   - "4"
   - "node"
 
+install:
+  - npm install -g codecov
+
 script:
-  - "npm run test-cov-html && bash <(curl -s https://codecov.io/bash)"
+  - istanbul cover ./node_modules/lab/bin/lab --report lcovonly  -- -l  && codecov
+  - codecov
