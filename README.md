@@ -2,6 +2,8 @@
 
 `proteusjs-console` is a transform stream useful for turning [proteusjs](https://github.com/hawdi/proteusjs) `server`, `database` and `http call` events into formatted strings.
 
+[![Build Status](https://api.travis-ci.org/hawdi/proteusjs-console.svg?branch=master)](http://travis-ci.org/hawdi/proteusjs-console)
+
 Lead Maintainer: [Jai Kishan](https://github.com/geekjai)
 
 ## Usage
