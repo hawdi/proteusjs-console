@@ -15,6 +15,7 @@ const Database = require('./fixture/database');
 const HttpClient = require('./fixture/httpclient');
 
 const Console = require('..');
+const nonExistMessage = 'proteusjs-console : no event found!';
 
 describe('ProteusjsConsole', () => {
 
@@ -177,7 +178,27 @@ describe('ProteusjsConsole', () => {
       });
     });
 
-  });
+    it('returns a formatted string for "non-exist" events', { plan: 2 }, (done) => {
+
+      const reporter = new Console();
+      const out = new Streams.Writer();
+      const reader = new Streams.Reader();
+
+      Database.error.event = 'non-exist';
+
+      reader.pipe(reporter).pipe(out);
+      reader.push(Database.error);
+      reader.push(null);
+      reader.once('end', () => {
+
+        Database.error.event = 'error';
+        expect(out.data).to.have.length(1);
+        expect(out.data[0]).to.be.equal(nonExistMessage);
+        done();
+      });
+    });
+
+  }); //end - Database Events
 
   describe('HttpClient Events', () => {
 
@@ -290,7 +311,7 @@ describe('ProteusjsConsole', () => {
 
         HttpClient.httpRequest.event = 'request';
         expect(out.data).to.have.length(1);
-        expect(out.data[0]).to.be.equal('proteusjs-console : no event found!');
+        expect(out.data[0]).to.be.equal(nonExistMessage);
         done();
       });
     });
