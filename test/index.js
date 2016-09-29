@@ -215,6 +215,66 @@ describe('ProteusjsConsole', () => {
       });
     });
 
+    it('returns a formatted string for "response" events with statusCode 300', { plan: 2 }, (done) => {
+
+      const reporter = new Console();
+      const out = new Streams.Writer();
+      const reader = new Streams.Reader();
+
+      HttpClient.httpResponse.statusCode = 300;
+      HttpClient.httpResponse.statusMessage = 'Multiple Choices';
+
+      reader.pipe(reporter).pipe(out);
+      reader.push(HttpClient.httpResponse);
+      reader.push(null);
+      reader.once('end', () => {
+
+        expect(out.data).to.have.length(1);
+        expect(out.data[0]).to.be.equal('160925/135820.098, [wreck:response] \u001b[1;32mget\u001b[0m http://json.org/example.html (\u001b[36m300\u001b[0m|Multiple Choices)\n');
+        done();
+      });
+    });
+
+    it('returns a formatted string for "response" events with statusCode 400', { plan: 2 }, (done) => {
+
+      const reporter = new Console();
+      const out = new Streams.Writer();
+      const reader = new Streams.Reader();
+
+      HttpClient.httpResponse.statusCode = 400;
+      HttpClient.httpResponse.statusMessage = 'Bad Request';
+
+      reader.pipe(reporter).pipe(out);
+      reader.push(HttpClient.httpResponse);
+      reader.push(null);
+      reader.once('end', () => {
+
+        expect(out.data).to.have.length(1);
+        expect(out.data[0]).to.be.equal('160925/135820.098, [wreck:response] \u001b[1;32mget\u001b[0m http://json.org/example.html (\u001b[33m400\u001b[0m|Bad Request)\n');
+        done();
+      });
+    });
+
+    it('returns a formatted string for "response" events with statusCode 500', { plan: 2 }, (done) => {
+
+      const reporter = new Console();
+      const out = new Streams.Writer();
+      const reader = new Streams.Reader();
+
+      HttpClient.httpResponse.statusCode = 500;
+      HttpClient.httpResponse.statusMessage = 'Internal Server Error';
+
+      reader.pipe(reporter).pipe(out);
+      reader.push(HttpClient.httpResponse);
+      reader.push(null);
+      reader.once('end', () => {
+
+        expect(out.data).to.have.length(1);
+        expect(out.data[0]).to.be.equal('160925/135820.098, [wreck:response] \u001b[1;32mget\u001b[0m http://json.org/example.html (\u001b[31m500\u001b[0m|Internal Server Error)\n');
+        done();
+      });
+    });
+
   });
 
 });
