@@ -26,6 +26,7 @@ Below are example outputs for the designated event type:
 	- `request` - 160925/080710.318, [server:request] ${event.method} ${event.path}
 	- `response` - 160925/080710.304, [server:response] http://localhost:6200: ${event.method} ${event.path} {} {event.statusCode} ({event.responseTime}ms)
 	- `ops` - 160925/080722.290, [server:ops] memory: 66Mb, uptime (seconds): 31.802, load: [0,0,0]
+	- `error` - 160925/080722.290, [server:error] message: `event.errorMessage` stack: `event.errorStack`
 
 - `[database event]`
 	- `query` - 160925/065549.166, [knex:query] select [ sql: select * from `log` ]
