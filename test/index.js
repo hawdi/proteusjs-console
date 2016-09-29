@@ -106,7 +106,27 @@ describe('ProteusjsConsole', () => {
       });
     });
 
-  });
+    it('returns a formatted string for "non-exist" events', { plan: 2 }, (done) => {
+
+      const reporter = new Console();
+      const out = new Streams.Writer();
+      const reader = new Streams.Reader();
+
+      Server.requestError.event = 'non-exist';
+
+      reader.pipe(reporter).pipe(out);
+      reader.push(Server.requestError);
+      reader.push(null);
+      reader.once('end', () => {
+
+        Server.requestError.event = 'error';
+        expect(out.data).to.have.length(1);
+        expect(out.data[0]).to.be.equal(nonExistMessage);
+        done();
+      });
+    });
+
+  }); //end - Server Events
 
   describe('Database Events', () => {
 
