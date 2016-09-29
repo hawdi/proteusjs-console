@@ -109,4 +109,29 @@ externals.response = {
   ]
 };
 
+externals.requestError = {
+  object: 'server',
+  event: 'error',
+  timestamp: 1475161410291,
+  id: '1475161410291:Geek:6200:itoh0h3t:10000',
+  url: {
+    protocol: null,
+    slashes: null,
+    auth: null,
+    host: null,
+    port: null,
+    hostname: null,
+    hash: null,
+    search: '',
+    query: {},
+    pathname: '/hapi500_2',
+    path: '/hapi500_2',
+    href: '/hapi500_2'
+  },
+  method: 'get',
+  pid: 6200,
+  errorMessage: 'Uncaught error: x is not defined',
+  errorStack: 'ReferenceError: Uncaught error: x is not defined'
+};
+
 module.exports = externals;

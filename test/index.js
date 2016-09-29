@@ -88,6 +88,23 @@ describe('ProteusjsConsole', () => {
       });
     });
 
+    it('returns a formatted string for "error" events', { plan: 2 }, (done) => {
+
+      const reporter = new Console();
+      const out = new Streams.Writer();
+      const reader = new Streams.Reader();
+
+      reader.pipe(reporter).pipe(out);
+      reader.push(Server.requestError);
+      reader.push(null);
+      reader.once('end', () => {
+
+        expect(out.data).to.have.length(1);
+        expect(out.data[0]).to.be.equal('160929/150330.291, [server:error] message: Uncaught error: x is not defined stack: ReferenceError: Uncaught error: x is not defined\n');
+        done();
+      });
+    });
+
   });
 
   describe('Database Events', () => {

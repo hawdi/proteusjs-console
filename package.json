@@ -1,11 +1,12 @@
 {
   "name": "proteusjs-console",
   "description": "Proteusjs Console Plugin",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "main": "lib/index.js",
   "keywords": [
     "proteusjs",
-    "plugin"
+    "plugin",
+    "transform stream"
   ],
   "engines": {
     "node": ">=4.0.0"
