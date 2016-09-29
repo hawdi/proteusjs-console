@@ -338,4 +338,31 @@ describe('ProteusjsConsole', () => {
 
   }); //end - HttpClient Events
 
+  describe('Non Exist Object Type', () => {
+
+    it('returns a formatted string for "non exist" object type', { plan: 2 }, (done) => {
+
+      const reporter = new Console();
+      const out = new Streams.Writer();
+      const reader = new Streams.Reader();
+
+      const input = {
+        object: 'non-exist',
+        event: 'non-exist',
+        type: 'non-exist',
+      };
+
+      reader.pipe(reporter).pipe(out);
+      reader.push(input);
+      reader.push(null);
+      reader.once('end', () => {
+
+        expect(out.data).to.have.length(1);
+        expect(out.data[0]).to.be.equal(nonExistMessage);
+        done();
+      });
+    });
+
+  });
+
 });
