@@ -275,6 +275,26 @@ describe('ProteusjsConsole', () => {
       });
     });
 
-  });
+    it('returns a formatted string for "non exist" events', { plan: 2 }, (done) => {
+
+      const reporter = new Console();
+      const out = new Streams.Writer();
+      const reader = new Streams.Reader();
+
+      HttpClient.httpRequest.event = 'non-exist';
+
+      reader.pipe(reporter).pipe(out);
+      reader.push(HttpClient.httpRequest);
+      reader.push(null);
+      reader.once('end', () => {
+
+        HttpClient.httpRequest.event = 'request';
+        expect(out.data).to.have.length(1);
+        expect(out.data[0]).to.be.equal('proteusjs-console : no event found!');
+        done();
+      });
+    });
+
+  }); //end - HttpClient Events
 
 });
