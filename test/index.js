@@ -15,6 +15,7 @@ const Database = require('./fixture/database');
 const HttpClient = require('./fixture/httpclient');
 
 const Console = require('..');
+const nonExistMessage = 'proteusjs-console : no event found!';
 
 describe('ProteusjsConsole', () => {
 
@@ -88,7 +89,44 @@ describe('ProteusjsConsole', () => {
       });
     });
 
-  });
+    it('returns a formatted string for "error" events', { plan: 2 }, (done) => {
+
+      const reporter = new Console();
+      const out = new Streams.Writer();
+      const reader = new Streams.Reader();
+
+      reader.pipe(reporter).pipe(out);
+      reader.push(Server.requestError);
+      reader.push(null);
+      reader.once('end', () => {
+
+        expect(out.data).to.have.length(1);
+        expect(out.data[0]).to.be.equal('160929/150330.291, [server:error] message: Uncaught error: x is not defined stack: ReferenceError: Uncaught error: x is not defined\n');
+        done();
+      });
+    });
+
+    it('returns a formatted string for "non-exist" events', { plan: 2 }, (done) => {
+
+      const reporter = new Console();
+      const out = new Streams.Writer();
+      const reader = new Streams.Reader();
+
+      Server.requestError.event = 'non-exist';
+
+      reader.pipe(reporter).pipe(out);
+      reader.push(Server.requestError);
+      reader.push(null);
+      reader.once('end', () => {
+
+        Server.requestError.event = 'error';
+        expect(out.data).to.have.length(1);
+        expect(out.data[0]).to.be.equal(nonExistMessage);
+        done();
+      });
+    });
+
+  }); //end - Server Events
 
   describe('Database Events', () => {
 
@@ -160,7 +198,27 @@ describe('ProteusjsConsole', () => {
       });
     });
 
-  });
+    it('returns a formatted string for "non-exist" events', { plan: 2 }, (done) => {
+
+      const reporter = new Console();
+      const out = new Streams.Writer();
+      const reader = new Streams.Reader();
+
+      Database.error.event = 'non-exist';
+
+      reader.pipe(reporter).pipe(out);
+      reader.push(Database.error);
+      reader.push(null);
+      reader.once('end', () => {
+
+        Database.error.event = 'error';
+        expect(out.data).to.have.length(1);
+        expect(out.data[0]).to.be.equal(nonExistMessage);
+        done();
+      });
+    });
+
+  }); //end - Database Events
 
   describe('HttpClient Events', () => {
 
@@ -194,6 +252,113 @@ describe('ProteusjsConsole', () => {
 
         expect(out.data).to.have.length(1);
         expect(out.data[0]).to.be.equal('160925/135820.098, [wreck:response] \u001b[1;32mget\u001b[0m http://json.org/example.html (\u001b[32m200\u001b[0m|OK)\n');
+        done();
+      });
+    });
+
+    it('returns a formatted string for "response" events with statusCode 300', { plan: 2 }, (done) => {
+
+      const reporter = new Console();
+      const out = new Streams.Writer();
+      const reader = new Streams.Reader();
+
+      HttpClient.httpResponse.statusCode = 300;
+      HttpClient.httpResponse.statusMessage = 'Multiple Choices';
+
+      reader.pipe(reporter).pipe(out);
+      reader.push(HttpClient.httpResponse);
+      reader.push(null);
+      reader.once('end', () => {
+
+        expect(out.data).to.have.length(1);
+        expect(out.data[0]).to.be.equal('160925/135820.098, [wreck:response] \u001b[1;32mget\u001b[0m http://json.org/example.html (\u001b[36m300\u001b[0m|Multiple Choices)\n');
+        done();
+      });
+    });
+
+    it('returns a formatted string for "response" events with statusCode 400', { plan: 2 }, (done) => {
+
+      const reporter = new Console();
+      const out = new Streams.Writer();
+      const reader = new Streams.Reader();
+
+      HttpClient.httpResponse.statusCode = 400;
+      HttpClient.httpResponse.statusMessage = 'Bad Request';
+
+      reader.pipe(reporter).pipe(out);
+      reader.push(HttpClient.httpResponse);
+      reader.push(null);
+      reader.once('end', () => {
+
+        expect(out.data).to.have.length(1);
+        expect(out.data[0]).to.be.equal('160925/135820.098, [wreck:response] \u001b[1;32mget\u001b[0m http://json.org/example.html (\u001b[33m400\u001b[0m|Bad Request)\n');
+        done();
+      });
+    });
+
+    it('returns a formatted string for "response" events with statusCode 500', { plan: 2 }, (done) => {
+
+      const reporter = new Console();
+      const out = new Streams.Writer();
+      const reader = new Streams.Reader();
+
+      HttpClient.httpResponse.statusCode = 500;
+      HttpClient.httpResponse.statusMessage = 'Internal Server Error';
+
+      reader.pipe(reporter).pipe(out);
+      reader.push(HttpClient.httpResponse);
+      reader.push(null);
+      reader.once('end', () => {
+
+        expect(out.data).to.have.length(1);
+        expect(out.data[0]).to.be.equal('160925/135820.098, [wreck:response] \u001b[1;32mget\u001b[0m http://json.org/example.html (\u001b[31m500\u001b[0m|Internal Server Error)\n');
+        done();
+      });
+    });
+
+    it('returns a formatted string for "non exist" events', { plan: 2 }, (done) => {
+
+      const reporter = new Console();
+      const out = new Streams.Writer();
+      const reader = new Streams.Reader();
+
+      HttpClient.httpRequest.event = 'non-exist';
+
+      reader.pipe(reporter).pipe(out);
+      reader.push(HttpClient.httpRequest);
+      reader.push(null);
+      reader.once('end', () => {
+
+        HttpClient.httpRequest.event = 'request';
+        expect(out.data).to.have.length(1);
+        expect(out.data[0]).to.be.equal(nonExistMessage);
+        done();
+      });
+    });
+
+  }); //end - HttpClient Events
+
+  describe('Non Exist Object Type', () => {
+
+    it('returns a formatted string for "non exist" object type', { plan: 2 }, (done) => {
+
+      const reporter = new Console();
+      const out = new Streams.Writer();
+      const reader = new Streams.Reader();
+
+      const input = {
+        object: 'non-exist',
+        event: 'non-exist',
+        type: 'non-exist',
+      };
+
+      reader.pipe(reporter).pipe(out);
+      reader.push(input);
+      reader.push(null);
+      reader.once('end', () => {
+
+        expect(out.data).to.have.length(1);
+        expect(out.data[0]).to.be.equal(nonExistMessage);
         done();
       });
     });
